@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "@/app/redux/slices/authSlice";
 import { Today } from "@/admin/utils/helpers";
-import { selectConfig } from "@/app/redux/slices/configSlice";
 import axios from "axios";
 import {
   selectSingleCustomer,
@@ -47,6 +46,7 @@ const validationSchema = Yup.object().shape({
 const AddMangoOrder = ({ onClick }) => {
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [load, Loading] = useState(false);
   const [orderResponse, setOrderResponse] = useState(false);
   const user = useSelector(selectUser);
   const router = useRouter();
@@ -90,11 +90,17 @@ const AddMangoOrder = ({ onClick }) => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log("Loading state is now:", loading);
+  }, [loading]);
+
   const placeOrder = async (values) => {
     setLoading(true);
     const order = [];
     let totalPrice = 0;
     let weight = 0;
+
+    console.log(loading);
 
     products &&
       products.map((item) => {
@@ -145,8 +151,7 @@ const AddMangoOrder = ({ onClick }) => {
         : "0";
 
     const date = Today();
-
-    console.log(values);
+    setLoading(true);
 
     const counterRef = db.collection("counters").doc("orderCounter");
 
@@ -202,12 +207,10 @@ const AddMangoOrder = ({ onClick }) => {
                 item_type: 2,
                 special_instruction: `${values.note}`,
                 item_quantity: 1,
-                item_weight: "12",
+                item_weight: "1",
                 item_description: "1 Carat Mango.",
                 amount_to_collect: perLotCondition,
               };
-
-              console.log(values, order);
 
               try {
                 const response = await fetch("/api/pathao/place-order", {
@@ -239,7 +242,6 @@ const AddMangoOrder = ({ onClick }) => {
             }
           }
         }
-
         sendConfirmationMsg(values, orderID);
         createCustomer(values, date, cusetomer_id);
 
@@ -275,7 +277,6 @@ const AddMangoOrder = ({ onClick }) => {
           setOrderResponse(null);
           console.error("Error placing order:", error);
         } finally {
-          setLoading(false);
           dispatch(updateSingleCustomer(null));
           router.push("/admin/place-order/id=" + orderID);
         }
@@ -287,10 +288,11 @@ const AddMangoOrder = ({ onClick }) => {
           color: "orange",
         });
         setOrderResponse(null);
-        setLoading(false);
         console.error("Transaction failed:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   };
 
   const sendConfirmationMsg = async (values, orderID, tracking_code = "") => {
@@ -383,6 +385,7 @@ const AddMangoOrder = ({ onClick }) => {
             <div className="py-5 px-6 md:px-4 max-h-full grid grid-cols-4 gap-4">
               <div className="col-span-2">
                 <Button
+                  disabled={loading}
                   onClick={onClick}
                   title="Cancel"
                   className="bg-red-100 hover:bg-red-200 hover:shadow-lg text-red-600 transition-all duration-300 w-full"

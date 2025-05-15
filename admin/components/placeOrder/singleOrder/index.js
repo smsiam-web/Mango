@@ -241,7 +241,7 @@ const OrderDetails = ({ onClick, item }) => {
                   id="shipping_cost"
                   className="text-sm sm:text-xl md:text-2xl text-title font-mono"
                 >
-                  {singleOrder?.deliveryCrg ? singleOrder?.deliveryCrg : "150"}
+                  {singleOrder?.deliveryCrg ? singleOrder?.deliveryCrg : "00"}
                   /-
                 </h1>
               </div>
