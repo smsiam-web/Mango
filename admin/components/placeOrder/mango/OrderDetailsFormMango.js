@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { selectSingleCustomer } from "@/app/redux/slices/singleCustomerSlice";
 import { selectWeightDetails } from "@/app/redux/slices/tempWeightDetails";
 import { selectUser } from "@/app/redux/slices/authSlice";
-import FormDropdownMango from "./FormDropdownMango";
+// import FormDropdownMango from "./FormDropdownMango";
 
 const OrderDetailsFormMango = ({ singleOrder, rest }) => {
   const [mango, setMango] = useState(null);
@@ -20,8 +20,8 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
   const [courier, setCourier] = useState("pathao");
 
   //pathao city, zone, Area
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedZone, setSelectedZone] = useState("");
+  // const [selectedCity, setSelectedCity] = useState("");
+  // const [selectedZone, setSelectedZone] = useState("");
 
   const user = useSelector(selectUser);
 
@@ -361,7 +361,7 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
         <span>Courier Partner</span>
         <FormDropdown name="courier" placeholder="Courier" items={Courier} />
       </div>
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <span>City</span>
         <FormDropdownMango
           itemsTrigger="cities"
@@ -398,61 +398,6 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
           name="recipient_area"
           placeholder="Areas"
         />
-      </div>
-
-      {/* <div>
-        <label className="block font-medium">City</label>
-        <select
-          className="border rounded p-2 w-full"
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-        >
-          <option value="">Select City</option>
-          {Array.isArray(cities?.data) &&
-            cities?.data.map((city) => (
-              <option key={city.city_id} value={city.city_id}>
-                {city.city_name}
-              </option>
-            ))}
-        </select>
-      </div> */}
-
-      {/* <div>
-        <label className="block font-medium">Zone</label>
-        <select
-          className="border rounded p-2 w-full"
-          value={selectedZone}
-          onChange={(e) => {
-            setSelectedZone(e.target.value);
-            setAreas([]);
-          }}
-        >
-          <option value="">Select City First</option>
-          {Array.isArray(zones?.data) ? (
-            zones?.data.map((zone) => (
-              <option key={zone.zone_id} value={zone.zone_id}>
-                {zone.zone_name}
-              </option>
-            ))
-          ) : (
-            <option value="" disabled>
-              Loading zones...
-            </option>
-          )}
-        </select>
-      </div>
-
-      <div>
-        <label className="block font-medium">Area</label>
-        <select className="border rounded p-2 w-full">
-          <option value="">Select Area</option>
-          {Array.isArray(areas?.data) &&
-            areas?.data.map((area) => (
-              <option key={area.area_id} value={area.area_id}>
-                {area.area_name}
-              </option>
-            ))}
-        </select>
       </div> */}
       <div className="mt-3">
         <span>

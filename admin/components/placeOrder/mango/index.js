@@ -29,9 +29,9 @@ const validationSchema = Yup.object().shape({
   order_from: Yup.string().max(60).required().default("Messenger Order"),
   customer_address: Yup.string().max(300).required().label("Address"),
   courier: Yup.string().max(50).required().default("Pathao"),
-  recipient_city: Yup.number().required().label("City"),
-  recipient_area: Yup.number().required().label("Area"),
-  recipient_zone: Yup.number().required().label("Zone"),
+  // recipient_city: Yup.number().required().label("City"),
+  // recipient_area: Yup.number().required().label("Area"),
+  // recipient_zone: Yup.number().required().label("Zone"),
 
   ad_ID: Yup.string().max(5).label("Ad ID"),
   salePrice: Yup.number().required().label("Sale Price"),
@@ -200,9 +200,9 @@ const AddMangoOrder = ({ onClick }) => {
                     ? "(HOME Delivery), "
                     : "(POINT Delivery), "
                 }${values.customer_address}`,
-                recipient_city: `${values.recipient_city}` || 1,
-                recipient_zone: `${values.recipient_zone}` || 10,
-                recipient_area: `${values.recipient_area}` || 101,
+                // recipient_city: `${values.recipient_city}` || 1,
+                // recipient_zone: `${values.recipient_zone}` || 10,
+                // recipient_area: `${values.recipient_area}` || 101,
                 delivery_type: 48,
                 item_type: 2,
                 special_instruction: `${values.note}`,

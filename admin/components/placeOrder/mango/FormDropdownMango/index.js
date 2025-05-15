@@ -23,58 +23,58 @@ function FormDropdownMango({
 
   const toggleDropdown = () => setOpen(!isOpen);
   const [items, setItems] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [zones, setZones] = useState([]);
-  const [areas, setAreas] = useState([]);
-  // const [selectedCity, setSelectedCity] = useState("");
-  // const [selectedZone, setSelectedZone] = useState("");
+  // const [cities, setCities] = useState([]);
+  // const [zones, setZones] = useState([]);
+  // const [areas, setAreas] = useState([]);
+  // // const [selectedCity, setSelectedCity] = useState("");
+  // // const [selectedZone, setSelectedZone] = useState("");
 
   const handleItemClick = (id) => {
-    if (selected === "setSelectedCity" && setSelectedCity) {
-      setSelectedCity(id);
-    } else if (selected === "setSelectedZone" && setSelectedZone) {
-      setSelectedZone(id);
-    }
+    // if (selected === "setSelectedCity" && setSelectedCity) {
+    //   setSelectedCity(id);
+    // } else if (selected === "setSelectedZone" && setSelectedZone) {
+    //   setSelectedZone(id);
+    // }
     setFieldTouched(name);
     setSelectedItem(id);
     setFieldValue(name, id);
     toggleDropdown();
   };
 
-  useEffect(() => {
-    fetch("/api/pathao/cities")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("City API response:", data);
-        setCities(data.data || []);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api/pathao/cities")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("City API response:", data);
+  //       setCities(data.data || []);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    if (itemsTrigger === "zones" && selectedCity) {
-      fetch(`/api/pathao/zones?city_id=${selectedCity}`)
-        .then((res) => res.json())
-        .then((data) => setZones(data.data || []));
-    }
-  }, [itemsTrigger, selectedCity]);
+  // useEffect(() => {
+  //   if (itemsTrigger === "zones" && selectedCity) {
+  //     fetch(`/api/pathao/zones?city_id=${selectedCity}`)
+  //       .then((res) => res.json())
+  //       .then((data) => setZones(data.data || []));
+  //   }
+  // }, [itemsTrigger, selectedCity]);
 
-  useEffect(() => {
-    if (itemsTrigger === "areas" && selectedZone) {
-      fetch(`/api/pathao/areas?zone_id=${selectedZone}`)
-        .then((res) => res.json())
-        .then((data) => setAreas(data.data || []));
-    }
-  }, [itemsTrigger, selectedZone]);
+  // useEffect(() => {
+  //   if (itemsTrigger === "areas" && selectedZone) {
+  //     fetch(`/api/pathao/areas?zone_id=${selectedZone}`)
+  //       .then((res) => res.json())
+  //       .then((data) => setAreas(data.data || []));
+  //   }
+  // }, [itemsTrigger, selectedZone]);
 
-  useEffect(() => {
-    if (itemsTrigger === "zones") {
-      setItems(zones);
-    } else if (itemsTrigger === "areas") {
-      setItems(areas);
-    } else if (itemsTrigger === "cities") {
-      setItems(cities);
-    }
-  }, [itemsTrigger, isOpen]);
+  // useEffect(() => {
+  //   if (itemsTrigger === "zones") {
+  //     setItems(zones);
+  //   } else if (itemsTrigger === "areas") {
+  //     setItems(areas);
+  //   } else if (itemsTrigger === "cities") {
+  //     setItems(cities);
+  //   }
+  // }, [itemsTrigger, isOpen]);
 
   // console.log(selectedItem, cities, items, itemsTrigger, label, keys);
 
