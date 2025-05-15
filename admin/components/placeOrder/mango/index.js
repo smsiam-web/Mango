@@ -91,7 +91,7 @@ const AddMangoOrder = ({ onClick }) => {
   }, []);
 
   const placeOrder = async (values) => {
-    // setLoading(true);
+    setLoading(true);
     const order = [];
     let totalPrice = 0;
     let weight = 0;
@@ -271,10 +271,11 @@ const AddMangoOrder = ({ onClick }) => {
             message: `Please try again later..`,
             color: "orange",
           });
-          // setLoading(false);
+
           setOrderResponse(null);
           console.error("Error placing order:", error);
         } finally {
+          setLoading(false);
           dispatch(updateSingleCustomer(null));
           router.push("/admin/place-order/id=" + orderID);
         }
