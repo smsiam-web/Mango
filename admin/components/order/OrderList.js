@@ -278,7 +278,9 @@ const AllOrder = () => {
                         index >= 15 * page - 15 &&
                         index + 1 <= 15 * page && (
                           <tr
-                            className={`${item?.isFilter && "bg-sky-200"} ${
+                            className={`${
+                              item.weight === 0 && "bg-red-200 text-red-600"
+                            } ${
                               item?.status?.toLowerCase() === "delivered" &&
                               "bg-green-200"
                             } ${
