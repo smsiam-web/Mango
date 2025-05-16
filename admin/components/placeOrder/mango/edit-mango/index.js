@@ -81,6 +81,8 @@ const EditMangoOrder = ({ onClick }) => {
     };
   }, []);
 
+  console.log(singleOrder);
+
   const updateOrder = async (values) => {
     setLoading(true);
     const order = [];
@@ -91,8 +93,10 @@ const EditMangoOrder = ({ onClick }) => {
       products.map((item) => {
         const yup = item?.product_details.yup;
 
+        console.log(item?.product_details);
+
         if (values[yup]) {
-          const title = yup.split("_");
+          const title = item?.product_details.yup.split("_");
           let s = [];
 
           title &&
@@ -102,15 +106,28 @@ const EditMangoOrder = ({ onClick }) => {
 
           weight += values[yup];
 
-          order.push({
-            title: s.join(" "),
-            quantity: values[yup],
-            price: item?.product_details.sale_price,
-            total_price: values[yup] * item?.product_details.sale_price,
-          });
+          if (item?.product_details.product_type === "আম") {
+            console.log(item?.product_details);
+            order.push({
+              store_id: item?.product_details?.store_id,
+              title: s.join(" "),
+              quantity: values[yup] * 12,
+              lot: values[yup],
+              sku: item?.product_details?.sku,
+              price: item?.product_details.sale_price,
+              total_price: values[yup] * 12 * item?.product_details.sale_price,
+              type: "mango",
+            });
+          } else {
+            order.push({
+              title: s.join(" "),
+              quantity: values[yup],
+              price: item?.product_details.sale_price,
+              total_price: values[yup] * item?.product_details.sale_price,
+            });
+          }
         }
       });
-
     order &&
       order.map((i) => {
         totalPrice += i.total_price;
@@ -279,8 +296,8 @@ const EditMangoOrder = ({ onClick }) => {
               customer_name: singleOrder?.customer_details?.customer_name || "",
               customer_address:
                 singleOrder?.customer_details?.customer_address || "",
-              salePrice: singleOrder?.customer_details?.courier || "",
-              courier: singleOrder?.customer_details?.salePrice || "",
+              salePrice: singleOrder?.customer_details?.salePrice || "",
+              courier: singleOrder?.customer_details?.courier || "",
               note: singleOrder?.customer_details?.note || "",
               invoice_Note: singleOrder?.customer_details?.invoice_Note || "",
               order_from: singleOrder?.customer_details?.order_from || "",

@@ -14,7 +14,7 @@ import singleOrderSlice, {
   updateSingleOrder,
 } from "@/app/redux/slices/singleOrderSlice";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Tooltip } from "@mantine/core";
+import { Modal, Tooltip, LoadingOverlay, Group, Box } from "@mantine/core";
 import { FaCloudUploadAlt, FaPrint } from "react-icons/fa";
 import { useBarcode } from "next-barcode";
 import { notifications } from "@mantine/notifications";
@@ -29,6 +29,7 @@ import BarcodeComponent from "@/admin/utils/BarcodeImage";
 const SearchBy = ({ onClick }) => {
   const [currentValue, setCurrentValue] = useState("RA014");
   const [filterOrder, setFilterOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState(useSelector(selectOrder));
   const [barcodeImage, setBarcodeImage] = useState("");
   const [order, setOrder] = useState([]);
@@ -42,8 +43,6 @@ const SearchBy = ({ onClick }) => {
     if (!!opened) return;
     resetFilter();
   }, [opened]);
-
-  console.log(filterOrder);
 
   const resetFilter = () => {
     setCurrentValue("RA014");
@@ -245,9 +244,90 @@ const SearchBy = ({ onClick }) => {
       });
   };
 
+  const sendItCourier = async (singleOrder) => {
+    if (!singleOrder) return;
+    setLoading(true);
+    console.log(singleOrder);
+    const order = singleOrder?.order;
+    const values = singleOrder?.customer_details;
+    if (order.length) {
+      let totalLot = 0;
+
+      order.forEach((item) => {
+        totalLot += item?.lot || 0;
+      });
+
+      const perLotCondition = Math.round(values?.salePrice / totalLot);
+
+      for (const item of order) {
+        console.log(item);
+        for (let i = 0; i < item?.lot; i++) {
+          const orderss = {
+            store_id: `${item?.store_id}`,
+            merchant_order_id: `${singleOrder.id}_${item?.sku}0${i + 1}`,
+            recipient_name: `${values?.customer_name}`,
+            recipient_phone: `${values?.phone_number}`,
+            recipient_address: `${
+              values?.delivery_type ? "(HOME Delivery), " : "(POINT Delivery), "
+            }${values?.customer_address}`,
+            // recipient_city: 1,
+            // recipient_zone: 10,
+            // recipient_area: 101,
+            delivery_type: 48,
+            item_type: 2,
+            special_instruction: `${values?.note}`,
+            item_quantity: 1,
+            item_weight: "1",
+            item_description: "1 Carat Mango.",
+            amount_to_collect: perLotCondition,
+          };
+
+          console.log(orderss);
+
+          try {
+            const response = await fetch("/api/pathao/place-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orderss),
+            });
+
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(`Server error: ${errorText}`);
+            }
+
+            const result = await response.json();
+            notifications.show({
+              title: result?.message || "Success",
+              message: `Status: ${result?.type}`,
+              color: "blue",
+              autoClose: 8000,
+            });
+            console.log("Order placed:", result);
+          } catch (error) {
+            console.error("Transaction failed:", error);
+            notifications.show({
+              title: "Order Failed",
+              message: error.message || "Something went wrong",
+              color: "red",
+              autoClose: 10000,
+            });
+          }
+        }
+      }
+    }
+    setLoading(false);
+  };
+
   return (
     <>
       <Modal opened={opened} onClose={close} size="xl" title="Found Data...">
+        <LoadingOverlay
+          visible={loading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+          loaderProps={{ color: "pink", type: "bars" }}
+        />
         {filterOrder && (
           <div className="p-3">
             <div className="flex justify-end gap-2">
@@ -292,12 +372,12 @@ const SearchBy = ({ onClick }) => {
                 </select>
               </div>
               {(user.staff_role === "HR" || "Admin") && (
-                <Link href={`/admin/edit-mango/id=${filterOrder.id}`}>
+                <div onClick={() => sendItCourier(filterOrder)}>
                   <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
                     <FaCloudUploadAlt size={14} /> Send it{" "}
                     {filterOrder?.customer_details.courier}
                   </span>
-                </Link>
+                </div>
               )}
               {((filterOrder.status === "Pending" &&
                 user.staff_role === "Sales Executive") ||
@@ -371,12 +451,14 @@ const SearchBy = ({ onClick }) => {
 
                 <h3>
                   Weight:{" "}
-                  {filterOrder.item_type === "mango"
+                  {filterOrder?.order[0].type === "mango"
                     ? filterOrder.weight * 12
                     : filterOrder.weight}
                   kg
                 </h3>
-                <h3>Lot: {filterOrder.weight}</h3>
+                {filterOrder?.order[0].type === "mango" && (
+                  <h3>Lot: {filterOrder.weight}</h3>
+                )}
               </div>
             </div>
             <h1 className="text-2xl">Order:</h1>

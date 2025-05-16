@@ -195,9 +195,9 @@ const AddMangoOrder = ({ onClick }) => {
                     ? "(HOME Delivery), "
                     : "(POINT Delivery), "
                 }${values.customer_address}`,
-                // recipient_city: `${values.recipient_city}` || 1,
-                // recipient_zone: `${values.recipient_zone}` || 10,
-                // recipient_area: `${values.recipient_area}` || 101,
+                // recipient_city: 1,
+                // recipient_zone: 10,
+                // recipient_area: 101,
                 delivery_type: 48,
                 item_type: 2,
                 special_instruction: `${values.note}`,
@@ -224,6 +224,7 @@ const AddMangoOrder = ({ onClick }) => {
                   title: result?.message || "Success",
                   message: `Status: ${result?.type}`,
                   color: "blue",
+                  autoClose: 6000,
                 });
                 console.log("Order placed:", result);
               } catch (error) {
@@ -232,12 +233,13 @@ const AddMangoOrder = ({ onClick }) => {
                   title: "Order Failed",
                   message: error.message || "Something went wrong",
                   color: "red",
+                  autoClose: 10000,
                 });
               }
             }
           }
         }
-        sendConfirmationMsg(values, orderID);
+        // sendConfirmationMsg(values, orderID);
         createCustomer(values, date, cusetomer_id);
 
         const sfc = {
