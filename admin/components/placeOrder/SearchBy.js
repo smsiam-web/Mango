@@ -15,7 +15,7 @@ import singleOrderSlice, {
 } from "@/app/redux/slices/singleOrderSlice";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Tooltip } from "@mantine/core";
-import { FaPrint } from "react-icons/fa";
+import { FaCloudUploadAlt, FaPrint } from "react-icons/fa";
 import { useBarcode } from "next-barcode";
 import { notifications } from "@mantine/notifications";
 import { selectUser } from "@/app/redux/slices/authSlice";
@@ -42,6 +42,8 @@ const SearchBy = ({ onClick }) => {
     if (!!opened) return;
     resetFilter();
   }, [opened]);
+
+  console.log(filterOrder);
 
   const resetFilter = () => {
     setCurrentValue("RA014");
@@ -170,7 +172,10 @@ const SearchBy = ({ onClick }) => {
 
   useEffect(() => {
     const value = currentValue?.toUpperCase();
-    if (value?.split("0")[0] === "RA" && value.length === 9) {
+    if (
+      (value?.split("0")[0] === "RA" && value.length === 9) ||
+      value.length === 8
+    ) {
       filter(value);
     }
   }, [currentValue]);
@@ -286,14 +291,20 @@ const SearchBy = ({ onClick }) => {
                   <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
+              {(user.staff_role === "HR" || "Admin") && (
+                <Link href={`/admin/edit-mango/id=${filterOrder.id}`}>
+                  <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
+                    <FaCloudUploadAlt size={14} /> Send it{" "}
+                    {filterOrder?.customer_details.courier}
+                  </span>
+                </Link>
+              )}
               {((filterOrder.status === "Pending" &&
                 user.staff_role === "Sales Executive") ||
                 user.staff_role === "HR" ||
                 user?.staff_role === "Sales Manager" ||
                 user?.staff_role === "Admin") && (
-                <Link
-                  href={`/admin/place-order/edit-order/id=${filterOrder.id}`}
-                >
+                <Link href={`/admin/edit-mango/id=${filterOrder.id}`}>
                   <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
                     <FiEdit size={14} /> Edit
                   </span>
@@ -358,7 +369,14 @@ const SearchBy = ({ onClick }) => {
                   <h3>Updated by: {filterOrder?.updateBy?.user || "N/A"}</h3>
                 )}
 
-                <h3>Weight: {filterOrder.weight}kg</h3>
+                <h3>
+                  Weight:{" "}
+                  {filterOrder.item_type === "mango"
+                    ? filterOrder.weight * 12
+                    : filterOrder.weight}
+                  kg
+                </h3>
+                <h3>Lot: {filterOrder.weight}</h3>
               </div>
             </div>
             <h1 className="text-2xl">Order:</h1>

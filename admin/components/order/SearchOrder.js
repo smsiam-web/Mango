@@ -100,28 +100,6 @@ const SearchOrder = ({ onClick }) => {
     setFilterOrder(null);
   };
 
-  // // update status on firebase
-  // const updateStatuss = async (i, status, id) => {
-  //   await db
-  //     .collection("placeOrder")
-  //     .doc(id)
-  //     .set(
-  //       {
-  //         ...i,
-  //         timestamp: i.timestamp,
-  //         status: status,
-  //       },
-  //       { merge: true }
-  //     );
-
-  //   notifications.show({
-  //     title: "Status Updated Successfully",
-  //     message: `Customer Name ${filterOrder?.customer_details.customer_name}, Order ID: #${filterOrder?.id}`,
-  //     color: "blue",
-  //   });
-  //   close();
-  // };
-
   const updateStatus = async (order, newStatus) => {
     const success = await updateOrderStatus(db, order.id, order, newStatus);
     if (success) {
@@ -139,51 +117,12 @@ const SearchOrder = ({ onClick }) => {
       });
     }
   };
-
-  // // search config
-  // useEffect(() => {
-  //   let ss = [];
-  //   if (!currentValue) {
-  //     dispatch(updateOrder(orders));
-  //     ss = [];
-  //     return;
-  //   }
-
-  //   const res = orders.map((i) => {
-  //     if (
-  //       i.customer_details.customer_name
-  //         .toLowerCase()
-  //         .split(" ")
-  //         .includes(currentValue?.toLowerCase())
-  //     ) {
-  //       ss.push({ ...i });
-  //     } else if (i.customer_details.phone_number === currentValue) {
-  //       ss.push({ ...i });
-  //     } else if (i.id.toLowerCase() === currentValue.toLowerCase()) {
-  //       ss.push({ ...i });
-  //     } else if (
-  //       i.customer_details.customer_name.toLowerCase() ===
-  //       currentValue.toLowerCase()
-  //     ) {
-  //       ss.push({ ...i });
-  //     } else if (
-  //       i.customer_details.customer_address
-  //         .toLowerCase()
-  //         .split(" ")
-  //         .includes(currentValue?.toLowerCase())
-  //     ) {
-  //       ss.push({ ...i });
-  //     } else if (i.date === currentValue) {
-  //       ss.push({ ...i });
-  //     }
-  //   });
-
-  //   ss.length ? dispatch(updateOrder(ss)) : dispatch(updateOrder(orders));
-  // }, [currentValue]);
-
   useEffect(() => {
     const value = currentValue?.toUpperCase();
-    if (value?.split("0")[0] === "RA" && value.length === 9) {
+    if (
+      (value?.split("0")[0] === "RA" && value.length === 9) ||
+      value.length === 8
+    ) {
       filter(value);
     }
   }, [currentValue]);
@@ -356,9 +295,7 @@ const SearchOrder = ({ onClick }) => {
                 user.staff_role === "HR" ||
                 user?.staff_role === "Sales Manager" ||
                 user?.staff_role === "Admin") && (
-                <Link
-                  href={`/admin/place-order/edit-order/id=${filterOrder.id}`}
-                >
+                <Link href={`/admin/edit-order/id=${filterOrder.id}`}>
                   <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
                     <FiEdit size={14} /> Edit
                   </span>

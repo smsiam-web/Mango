@@ -19,10 +19,6 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
   const [weightDetails, setweightDetails] = useState(null);
   const [courier, setCourier] = useState("pathao");
 
-  //pathao city, zone, Area
-  // const [selectedCity, setSelectedCity] = useState("");
-  // const [selectedZone, setSelectedZone] = useState("");
-
   const user = useSelector(selectUser);
 
   const getCustomer = useSelector(selectSingleCustomer);
@@ -181,6 +177,8 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
 
   const obj = singleOrder?.order;
 
+  console.log(obj, singleOrder);
+
   return (
     <div className="max-h-full">
       <div className="pb-2">
@@ -223,7 +221,33 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
       </div>
 
       <div className="pb-3">
-        {!!obj?.length && <span className="md:text-2xl">Order</span>}
+        {!!obj?.length && (
+          <div>
+            <h1 className="text-title text-lg md:text-2xl font-semibold border-b sm:border-b-2">
+              Order Details:
+            </h1>
+            <div>
+              <div className="flex justify-between py-1 border-b sm:border-b-2 text-sm font-medium">
+                <div>
+                  <h2 className="text-sm sm:text-lg text-title font-mono font-semibold">
+                    Item.
+                  </h2>
+                </div>
+                <div className="flex justify-between w-7/12">
+                  <span className="text-sm sm:text-lg text-title font-mono font-semibold">
+                    Weight.
+                  </span>
+                  <span className="text-sm sm:text-lg text-title font-mono font-semibold">
+                    Price.
+                  </span>
+                  <span className="text-sm sm:text-lg text-title font-mono font-semibold">
+                    Total(BDT)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {!!obj?.length &&
           obj.map((item, i) => (
             <div key={i}>
@@ -233,7 +257,7 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
                     className="text-md md:text-xl text-slate-500 font-mono"
                     id={`item_0${++i}`}
                   >
-                    {item?.product_details?.title}
+                    {item?.title}
                   </h2>
                 </div>
                 <div className="flex justify-between w-7/12">
@@ -241,19 +265,19 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
                     className="text-md md:text-xl text-slate-500 font-mono"
                     id={`item_0${i}_quantity`}
                   >
-                    {item?.product_details.quantity}kg
+                    {item?.quantity}kg
                   </span>
                   <span
                     className="text-md md:text-xl text-slate-500 font-mono"
                     id={`item_0${i}_price`}
                   >
-                    {item?.product_details.price}
+                    {item?.price}
                   </span>
                   <span
                     className="text-md md:text-xl text-slate-500 font-mono"
                     id={`item_0${i}_total_price`}
                   >
-                    {item?.product_details.total_price}/-
+                    {item?.total_price}/-
                   </span>
                 </div>
               </div>
@@ -361,44 +385,6 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
         <span>Courier Partner</span>
         <FormDropdown name="courier" placeholder="Courier" items={Courier} />
       </div>
-      {/* <div className="mt-3">
-        <span>City</span>
-        <FormDropdownMango
-          itemsTrigger="cities"
-          selected="setSelectedCity"
-          keys="city_id"
-          label="city_name"
-          name="recipient_city"
-          placeholder="Cities"
-          setSelectedCity={setSelectedCity}
-        />
-      </div>
-
-      <div className="mt-3">
-        <span>Zone</span>
-        <FormDropdownMango
-          itemsTrigger="zones"
-          selected="setSelectedZone"
-          selectedCity={selectedCity}
-          keys="zone_id"
-          label="zone_name"
-          name="recipient_zone"
-          placeholder="Zones"
-          setSelectedZone={setSelectedZone}
-        />
-      </div>
-
-      <div className="mt-3">
-        <span>Area</span>
-        <FormDropdownMango
-          itemsTrigger="areas"
-          selectedZone={selectedZone}
-          keys="area_id"
-          label="area_name"
-          name="recipient_area"
-          placeholder="Areas"
-        />
-      </div> */}
       <div className="mt-3">
         <span>
           Received by<span className="text-red-600">*</span>

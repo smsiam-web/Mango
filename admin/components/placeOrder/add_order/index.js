@@ -195,6 +195,7 @@ const AddOrder = ({ onClick }) => {
               const orderData = {
                 sfc,
                 deliveryCrg,
+                item_type: "regular",
                 weight,
                 customer_details: values,
                 discount,

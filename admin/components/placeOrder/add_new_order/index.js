@@ -192,6 +192,7 @@ const AddNewOrder = ({ onClick }) => {
                 customer_details: values,
                 discount,
                 totalPrice,
+                item_type: "regular",
                 date,
                 order,
                 timestamp,
