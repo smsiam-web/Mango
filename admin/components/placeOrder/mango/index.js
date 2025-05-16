@@ -183,99 +183,99 @@ const AddMangoOrder = ({ onClick }) => {
 
           const perLotCondition = Math.round(values?.salePrice / totalLot);
           console.log(values);
-          // for (const item of order) {
-          //   for (let i = 0; i < item?.lot; i++) {
-          //     const orderss = {
-          //       store_id: `${item?.store_id}`,
-          //       merchant_order_id: `${orderID}_${item.sku}0${i + 1}`,
-          //       recipient_name: `${values.customer_name}`,
-          //       recipient_phone: `${values.phone_number}`,
-          //       recipient_address: `${
-          //         values?.delivery_type
-          //           ? "(HOME Delivery), "
-          //           : "(POINT Delivery), "
-          //       }${values.customer_address}`,
-          //       // recipient_city: `${values.recipient_city}` || 1,
-          //       // recipient_zone: `${values.recipient_zone}` || 10,
-          //       // recipient_area: `${values.recipient_area}` || 101,
-          //       delivery_type: 48,
-          //       item_type: 2,
-          //       special_instruction: `${values.note}`,
-          //       item_quantity: 1,
-          //       item_weight: "1",
-          //       item_description: "1 Carat Mango.",
-          //       amount_to_collect: perLotCondition,
-          //     };
+          for (const item of order) {
+            for (let i = 0; i < item?.lot; i++) {
+              const orderss = {
+                store_id: `${item?.store_id}`,
+                merchant_order_id: `${orderID}_${item.sku}0${i + 1}`,
+                recipient_name: `${values.customer_name}`,
+                recipient_phone: `${values.phone_number}`,
+                recipient_address: `${
+                  values?.delivery_type
+                    ? "(HOME Delivery), "
+                    : "(POINT Delivery), "
+                }${values.customer_address}`,
+                // recipient_city: `${values.recipient_city}` || 1,
+                // recipient_zone: `${values.recipient_zone}` || 10,
+                // recipient_area: `${values.recipient_area}` || 101,
+                delivery_type: 48,
+                item_type: 2,
+                special_instruction: `${values.note}`,
+                item_quantity: 1,
+                item_weight: "1",
+                item_description: "1 Carat Mango.",
+                amount_to_collect: perLotCondition,
+              };
 
-          //     try {
-          //       const response = await fetch("/api/pathao/place-order", {
-          //         method: "POST",
-          //         headers: { "Content-Type": "application/json" },
-          //         body: JSON.stringify(orderss),
-          //       });
+              try {
+                const response = await fetch("/api/pathao/place-order", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(orderss),
+                });
 
-          //       if (!response.ok) {
-          //         const errorText = await response.text();
-          //         throw new Error(`Server error: ${errorText}`);
-          //       }
+                if (!response.ok) {
+                  const errorText = await response.text();
+                  throw new Error(`Server error: ${errorText}`);
+                }
 
-          //       const result = await response.json();
-          //       notifications.show({
-          //         title: result?.message || "Success",
-          //         message: `Status: ${result?.type}`,
-          //         color: "blue",
-          //       });
-          //       console.log("Order placed:", result);
-          //     } catch (error) {
-          //       console.error("Transaction failed:", error);
-          //       notifications.show({
-          //         title: "Order Failed",
-          //         message: error.message || "Something went wrong",
-          //         color: "red",
-          //       });
-          //     }
-          //   }
-          // }
+                const result = await response.json();
+                notifications.show({
+                  title: result?.message || "Success",
+                  message: `Status: ${result?.type}`,
+                  color: "blue",
+                });
+                console.log("Order placed:", result);
+              } catch (error) {
+                console.error("Transaction failed:", error);
+                notifications.show({
+                  title: "Order Failed",
+                  message: error.message || "Something went wrong",
+                  color: "red",
+                });
+              }
+            }
+          }
         }
-        // sendConfirmationMsg(values, orderID);
-        // createCustomer(values, date, cusetomer_id);
+        sendConfirmationMsg(values, orderID);
+        createCustomer(values, date, cusetomer_id);
 
-        // const sfc = {
-        //   consignment_id: null,
-        //   tracking_code: null,
-        // };
-        // const orderData = {
-        //   sfc,
-        //   item_type: "mango",
-        //   deliveryCrg,
-        //   weight,
-        //   customer_details: values,
-        //   discount,
-        //   totalPrice,
-        //   date,
-        //   order,
-        //   timestamp,
-        //   placeBy: user.name,
-        //   placeById: user.staff_id,
-        //   status: "Pending",
-        //   orderID,
-        // };
-        // // console.log(orderData);
-        // try {
-        //   db.collection("placeOrder").doc(orderID).set(orderData);
-        // } catch (error) {
-        //   notifications.show({
-        //     title: "Failed to place order",
-        //     message: `Please try again later..`,
-        //     color: "orange",
-        //   });
+        const sfc = {
+          consignment_id: null,
+          tracking_code: null,
+        };
+        const orderData = {
+          sfc,
+          item_type: "mango",
+          deliveryCrg,
+          weight,
+          customer_details: values,
+          discount,
+          totalPrice,
+          date,
+          order,
+          timestamp,
+          placeBy: user.name,
+          placeById: user.staff_id,
+          status: "Pending",
+          orderID,
+        };
 
-        //   setOrderResponse(null);
-        //   console.error("Error placing order:", error);
-        // } finally {
-        //   dispatch(updateSingleCustomer(null));
-        //   router.push("/admin/place-order/id=" + orderID);
-        // }
+        try {
+          db.collection("placeOrder").doc(orderID).set(orderData);
+        } catch (error) {
+          notifications.show({
+            title: "Failed to place order",
+            message: `Please try again later..`,
+            color: "orange",
+          });
+
+          setOrderResponse(null);
+          console.error("Error placing order:", error);
+        } finally {
+          dispatch(updateSingleCustomer(null));
+          router.push("/admin/place-order/id=" + orderID);
+        }
       })
       .catch((error) => {
         notifications.show({
