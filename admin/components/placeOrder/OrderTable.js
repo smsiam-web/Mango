@@ -244,7 +244,6 @@ const OrderTable = () => {
                   <th className="px-4 py-3 ">DISCOUNT</th>
                   <th className="px-4 py-3 ">Amount</th>
                   <th className="px-4 py-3 ">WGT</th>
-
                   <th className="px-4 py-3 text-center ">status</th>
                   <th
                     className={`px-4 py-3 ${
@@ -261,7 +260,6 @@ const OrderTable = () => {
                   <th className="px-4 py-3 ">Created at</th>
                   <th className="px-4 py-3 ">Created By</th>
                   <th className="px-4 py-3 ">invoice</th>
-
                   <th className="px-4 py-3 text-center">ACTIONS</th>
                 </tr>
               </thead>
