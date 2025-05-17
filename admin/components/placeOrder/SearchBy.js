@@ -39,6 +39,309 @@ const SearchBy = ({ onClick }) => {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
+  const [zones, setZones] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [zonesLoading, setZonesLoading] = useState(false);
+  const [areaLoading, setAreaLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedZone, setSelectedZone] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
+
+  const CITIES = [
+    {
+      city_id: 52,
+      city_name: "Bagerhat",
+    },
+    {
+      city_id: 62,
+      city_name: "Bandarban ",
+    },
+    {
+      city_id: 34,
+      city_name: "Barguna ",
+    },
+    {
+      city_id: 17,
+      city_name: "Barisal",
+    },
+    {
+      city_id: 32,
+      city_name: "B. Baria",
+    },
+    {
+      city_id: 53,
+      city_name: "Bhola",
+    },
+    {
+      city_id: 9,
+      city_name: "Bogra",
+    },
+    {
+      city_id: 8,
+      city_name: "Chandpur",
+    },
+    {
+      city_id: 15,
+      city_name: "Chapainawabganj",
+    },
+    {
+      city_id: 2,
+      city_name: "Chittagong",
+    },
+    {
+      city_id: 61,
+      city_name: "Chuadanga",
+    },
+    {
+      city_id: 11,
+      city_name: "Cox's Bazar",
+    },
+    {
+      city_id: 5,
+      city_name: "Cumilla",
+    },
+    {
+      city_id: 1,
+      city_name: "Dhaka",
+    },
+    {
+      city_id: 35,
+      city_name: "Dinajpur",
+    },
+    {
+      city_id: 18,
+      city_name: "Faridpur",
+    },
+    {
+      city_id: 6,
+      city_name: "Feni",
+    },
+    {
+      city_id: 38,
+      city_name: "Gaibandha",
+    },
+    {
+      city_id: 22,
+      city_name: "Gazipur",
+    },
+    {
+      city_id: 56,
+      city_name: "Gopalgonj ",
+    },
+    {
+      city_id: 30,
+      city_name: "Habiganj",
+    },
+    {
+      city_id: 41,
+      city_name: "Jamalpur",
+    },
+    {
+      city_id: 19,
+      city_name: "Jashore",
+    },
+    {
+      city_id: 27,
+      city_name: "Jhalokathi",
+    },
+    {
+      city_id: 49,
+      city_name: "Jhenidah",
+    },
+    {
+      city_id: 48,
+      city_name: "Joypurhat",
+    },
+    {
+      city_id: 63,
+      city_name: "Khagrachari",
+    },
+    {
+      city_id: 20,
+      city_name: "Khulna",
+    },
+    {
+      city_id: 42,
+      city_name: "Kishoreganj",
+    },
+    {
+      city_id: 55,
+      city_name: "Kurigram ",
+    },
+    {
+      city_id: 28,
+      city_name: "Kushtia",
+    },
+    {
+      city_id: 40,
+      city_name: "Lakshmipur",
+    },
+    {
+      city_id: 57,
+      city_name: "Lalmonirhat ",
+    },
+    {
+      city_id: 43,
+      city_name: "Madaripur",
+    },
+    {
+      city_id: 60,
+      city_name: "Magura ",
+    },
+    {
+      city_id: 16,
+      city_name: "Manikganj",
+    },
+    {
+      city_id: 50,
+      city_name: "Meherpur",
+    },
+    {
+      city_id: 12,
+      city_name: "Moulvibazar",
+    },
+    {
+      city_id: 23,
+      city_name: "Munsiganj",
+    },
+    {
+      city_id: 26,
+      city_name: "Mymensingh",
+    },
+    {
+      city_id: 46,
+      city_name: "Naogaon",
+    },
+    {
+      city_id: 54,
+      city_name: "Narail ",
+    },
+    {
+      city_id: 21,
+      city_name: "Narayanganj",
+    },
+    {
+      city_id: 47,
+      city_name: "Narshingdi",
+    },
+    {
+      city_id: 14,
+      city_name: "Natore",
+    },
+    {
+      city_id: 44,
+      city_name: "Netrakona",
+    },
+    {
+      city_id: 39,
+      city_name: "Nilphamari",
+    },
+    {
+      city_id: 7,
+      city_name: "Noakhali",
+    },
+    {
+      city_id: 24,
+      city_name: "Pabna",
+    },
+    {
+      city_id: 37,
+      city_name: "Panchagarh",
+    },
+    {
+      city_id: 29,
+      city_name: "Patuakhali",
+    },
+    {
+      city_id: 31,
+      city_name: "Pirojpur",
+    },
+    {
+      city_id: 58,
+      city_name: "Rajbari ",
+    },
+    {
+      city_id: 4,
+      city_name: "Rajshahi",
+    },
+    {
+      city_id: 59,
+      city_name: "Rangamati ",
+    },
+    {
+      city_id: 25,
+      city_name: "Rangpur",
+    },
+    {
+      city_id: 51,
+      city_name: "Satkhira",
+    },
+    {
+      city_id: 64,
+      city_name: "Shariatpur ",
+    },
+    {
+      city_id: 33,
+      city_name: "Sherpur",
+    },
+    {
+      city_id: 10,
+      city_name: "Sirajganj",
+    },
+    {
+      city_id: 45,
+      city_name: "Sunamganj",
+    },
+    {
+      city_id: 3,
+      city_name: "Sylhet",
+    },
+    {
+      city_id: 13,
+      city_name: "Tangail",
+    },
+    {
+      city_id: 36,
+      city_name: "Thakurgaon ",
+    },
+  ];
+
+  useEffect(() => {
+    if (selectedCity) {
+      setZonesLoading(true); // Start loading
+      fetch(`/api/pathao/zones?city_id=${selectedCity}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setZones(data.data || []);
+        })
+        .catch((err) => {
+          console.error("Failed to load zones", err);
+          setZones([]); // fallback
+        })
+        .finally(() => {
+          setZonesLoading(false); // End loading
+        });
+    }
+  }, [selectedCity]);
+
+  useEffect(() => {
+    if (selectedZone) {
+      setAreaLoading(true);
+      fetch(`/api/pathao/areas?zone_id=${selectedZone}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setAreas(data.data || []);
+        })
+        .catch((err) => {
+          console.error("Failed to load Areas", err);
+          setAreas([]);
+        })
+        .finally(() => {
+          setAreaLoading(false);
+        });
+    }
+  }, [selectedZone]);
+
   useEffect(() => {
     if (!!opened) return;
     resetFilter();
@@ -247,77 +550,95 @@ const SearchBy = ({ onClick }) => {
   const sendItCourier = async (singleOrder) => {
     if (!singleOrder) return;
     setLoading(true);
-    console.log(singleOrder);
-    const order = singleOrder?.order;
-    const values = singleOrder?.customer_details;
-    if (order.length) {
-      let totalLot = 0;
+    if (selectedCity && selectedZone && selectedArea) {
+      const order = singleOrder?.order;
+      const values = singleOrder?.customer_details;
+      if (order.length) {
+        let totalLot = 0;
+        order.forEach((item) => {
+          totalLot += item?.lot || 0;
+        });
 
-      order.forEach((item) => {
-        totalLot += item?.lot || 0;
-      });
+        const perLotCondition = Math.round(values?.salePrice / totalLot);
 
-      const perLotCondition = Math.round(values?.salePrice / totalLot);
+        for (const item of order) {
+          console.log(item);
+          for (let i = 0; i < item?.lot; i++) {
+            const orderss = {
+              store_id: `${item?.store_id}`,
+              merchant_order_id: `${singleOrder.id}_${item?.sku}0${i + 1}`,
+              recipient_name: `${values?.customer_name}`,
+              recipient_phone: `${values?.phone_number}`,
+              recipient_address: `${
+                values?.delivery_type
+                  ? "(HOME Delivery), "
+                  : "(POINT Delivery), "
+              }${values?.customer_address}`,
+              recipient_city: selectedCity,
+              recipient_zone: selectedZone,
+              recipient_area: selectedArea,
+              delivery_type: 48,
+              item_type: 2,
+              special_instruction: `${values?.note}`,
+              item_quantity: 1,
+              item_weight: "1",
+              item_description: "1 Carat Mango.",
+              amount_to_collect: perLotCondition,
+            };
 
-      for (const item of order) {
-        console.log(item);
-        for (let i = 0; i < item?.lot; i++) {
-          const orderss = {
-            store_id: `${item?.store_id}`,
-            merchant_order_id: `${singleOrder.id}_${item?.sku}0${i + 1}`,
-            recipient_name: `${values?.customer_name}`,
-            recipient_phone: `${values?.phone_number}`,
-            recipient_address: `${
-              values?.delivery_type ? "(HOME Delivery), " : "(POINT Delivery), "
-            }${values?.customer_address}`,
-            // recipient_city: 1,
-            // recipient_zone: 10,
-            // recipient_area: 101,
-            delivery_type: 48,
-            item_type: 2,
-            special_instruction: `${values?.note}`,
-            item_quantity: 1,
-            item_weight: "1",
-            item_description: "1 Carat Mango.",
-            amount_to_collect: perLotCondition,
-          };
+            console.log(orderss);
 
-          console.log(orderss);
+            try {
+              const response = await fetch("/api/pathao/place-order", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderss),
+              });
 
-          try {
-            const response = await fetch("/api/pathao/place-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(orderss),
-            });
+              if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Server error: ${errorText}`);
+              }
 
-            if (!response.ok) {
-              const errorText = await response.text();
-              throw new Error(`Server error: ${errorText}`);
+              const result = await response.json();
+              notifications.show({
+                title: result?.message || "Success",
+                message: `Status: ${result?.type}`,
+                color: "blue",
+                autoClose: 8000,
+              });
+              console.log("Order placed:", result);
+            } catch (error) {
+              console.error("Transaction failed:", error);
+              notifications.show({
+                title: "Order Failed",
+                message: error.message || "Something went wrong",
+                color: "red",
+                autoClose: 10000,
+              });
             }
-
-            const result = await response.json();
-            notifications.show({
-              title: result?.message || "Success",
-              message: `Status: ${result?.type}`,
-              color: "blue",
-              autoClose: 8000,
-            });
-            console.log("Order placed:", result);
-          } catch (error) {
-            console.error("Transaction failed:", error);
-            notifications.show({
-              title: "Order Failed",
-              message: error.message || "Something went wrong",
-              color: "red",
-              autoClose: 10000,
-            });
           }
         }
       }
+      setSelectedCity("");
+      setSelectedZone("");
+      setSelectedArea("");
+      setLoading(false);
+    } else {
+      notifications.show({
+        title: "Send Error",
+        message: "Select city, zone, area Fast",
+        color: "red",
+        autoClose: 6000,
+      });
     }
+    setSelectedCity("");
+    setSelectedZone("");
+    setSelectedArea("");
     setLoading(false);
   };
+
+  console.log(selectedCity, selectedZone, selectedArea);
 
   return (
     <>
@@ -371,7 +692,8 @@ const SearchBy = ({ onClick }) => {
                   <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
-              {(user.staff_role === "HR" || "Admin" || "Parcel Executive") && (
+              {(user.staff_role === "HR" ||
+                user.staff_role === "Parcel Executive") && (
                 <div onClick={() => sendItCourier(filterOrder)}>
                   <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
                     <FaCloudUploadAlt size={14} /> Send it{" "}
@@ -463,44 +785,129 @@ const SearchBy = ({ onClick }) => {
                   )}
               </div>
             </div>
-            <h1 className="text-2xl">Order:</h1>
-            <div className="border-t my-2">
-              {filterOrder &&
-                filterOrder?.order.map((item, i) => (
-                  <div key={i}>
-                    <div className="flex justify-between py-1 md:py-1 border-b">
-                      <div>
-                        <h2
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${++i}`}
-                        >
-                          {item.title}
-                        </h2>
-                      </div>
-                      <div className="flex justify-between w-7/12">
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_quantity`}
-                        >
-                          {item.quantity}kg
-                        </span>
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_price`}
-                        >
-                          {item.price}
-                        </span>
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_total_price`}
-                        >
-                          {item.total_price}/-
-                        </span>
-                      </div>
+            <div>
+              {(user.staff_role === "HR" ||
+                user.staff_role === "Parcel Executive") && (
+                <div className="pb-4">
+                  <div className="space-y-4">
+                    <div>
+                      <label
+                        htmlFor="city"
+                        className="block mb-1 font-semibold"
+                      >
+                        City
+                      </label>
+                      <select
+                        id="city"
+                        className="w-full p-2 border rounded"
+                        value={selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                      >
+                        <option value="">Select a city</option>
+                        {CITIES.map((city) => (
+                          <option key={city.city_id} value={city.city_id}>
+                            {city.city_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="zone"
+                        className="block mb-1 font-semibold"
+                      >
+                        Zone
+                      </label>
+                      <select
+                        id="zone"
+                        className="w-full p-2 border rounded"
+                        disabled={!selectedCity}
+                        onChange={(e) => setSelectedZone(e.target.value)}
+                      >
+                        <option value="">
+                          {zonesLoading ? "Loading zones..." : "Select a zone"}
+                        </option>
+                        {!zonesLoading &&
+                          Array.isArray(zones.data) &&
+                          zones?.data.map((zone) => (
+                            <option key={zone?.zone_id} value={zone?.zone_id}>
+                              {zone?.zone_name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="zone"
+                        className="block mb-1 font-semibold"
+                      >
+                        Zone
+                      </label>
+                      <select
+                        id="zone"
+                        className="w-full p-2 border rounded"
+                        disabled={!selectedZone}
+                        onChange={(e) => setSelectedArea(e.target.value)}
+                      >
+                        <option value="">
+                          {areaLoading ? "Loading areas..." : "Select a area"}
+                        </option>
+                        {!areaLoading &&
+                          Array.isArray(areas.data) &&
+                          areas?.data.map((area) => (
+                            <option key={area.area_id} value={area.area_id}>
+                              {area.area_name}
+                            </option>
+                          ))}
+                      </select>
                     </div>
                   </div>
-                ))}
+                </div>
+              )}
+
+              <div>
+                <h1 className="text-2xl">Order:</h1>
+                <div className="border-t my-2">
+                  {filterOrder &&
+                    filterOrder?.order.map((item, i) => (
+                      <div key={i}>
+                        <div className="flex justify-between py-1 md:py-1 border-b">
+                          <div>
+                            <h2
+                              className="text-sm sm:text-xl text-title font-mono"
+                              id={`item_0${++i}`}
+                            >
+                              {item.title}
+                            </h2>
+                          </div>
+                          <div className="flex justify-between w-7/12">
+                            <span
+                              className="text-sm sm:text-xl text-title font-mono"
+                              id={`item_0${i}_quantity`}
+                            >
+                              {item.quantity}kg
+                            </span>
+                            <span
+                              className="text-sm sm:text-xl text-title font-mono"
+                              id={`item_0${i}_price`}
+                            >
+                              {item.price}
+                            </span>
+                            <span
+                              className="text-sm sm:text-xl text-title font-mono"
+                              id={`item_0${i}_total_price`}
+                            >
+                              {item.total_price}/-
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
+
             <div className="flex justify-between mb-10 gap-5">
               <div className=" ">
                 <h2 className="text-slate-600 ">

@@ -177,8 +177,6 @@ const OrderDetailsFormMango = ({ singleOrder, rest }) => {
 
   const obj = singleOrder?.order;
 
-  console.log(obj, singleOrder);
-
   return (
     <div className="max-h-full">
       <div className="pb-2">
