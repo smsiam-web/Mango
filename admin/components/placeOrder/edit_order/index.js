@@ -136,6 +136,7 @@ const EditOrder = ({ onClick }) => {
       deliveryCrg,
       weight,
       customer_details: values,
+      item_type: singleOrder?.item_type || "regular",
       discount,
       totalPrice,
       date: singleOrder?.date,

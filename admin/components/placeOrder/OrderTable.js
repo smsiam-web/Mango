@@ -469,9 +469,7 @@ const OrderTable = () => {
                               user.staff_role === "Sales Executive") ||
                             user?.staff_role === "Sales Manager" ? (
                               <td className="px-4 py-3 ">
-                                <Link
-                                  href={`/admin/place-order/edit-order/id=${item.id}`}
-                                >
+                                <Link href={`/admin/edit-mango/id=${item.id}`}>
                                   <Tooltip label="Edit" color="blue" withArrow>
                                     <span className="cursor-pointer hover:text-blue-400 items-center justify-center flex">
                                       <FiEdit size={16} />
@@ -533,7 +531,11 @@ const OrderTable = () => {
                                   )}
 
                                   <Link
-                                    href={`/admin/place-order/edit-order/id=${item.id}`}
+                                    href={`/admin/edit-${
+                                      item?.item_type === "mango"
+                                        ? "mango"
+                                        : "order"
+                                    }/id=${item.id}`}
                                   >
                                     <Tooltip
                                       label="Edit"

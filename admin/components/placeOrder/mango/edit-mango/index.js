@@ -162,6 +162,7 @@ const EditMangoOrder = ({ onClick }) => {
       sfc,
       deliveryCrg,
       weight,
+      item_type: singleOrder?.item_type || "mango",
       customer_details: values,
       discount,
       totalPrice,

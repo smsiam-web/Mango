@@ -539,7 +539,7 @@ const AllOrder = () => {
                                   )}
 
                                   <Link
-                                    href={`/admin/place-order/edit-order/id=${item.id}`}
+                                    href={`/admin/edit-order/id=${item.id}`}
                                   >
                                     <Tooltip
                                       label="Edit"

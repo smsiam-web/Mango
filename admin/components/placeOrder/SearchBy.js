@@ -371,7 +371,7 @@ const SearchBy = ({ onClick }) => {
                   <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
-              {(user.staff_role === "HR" || "Admin") && (
+              {(user.staff_role === "HR" || "Admin" || "Parcel Executive") && (
                 <div onClick={() => sendItCourier(filterOrder)}>
                   <span className="bg-black flex items-center gap-1 px-3 py-2 rounded-md cursor-pointer  text-xs text-white font-medium hover:shadow-lg transition-all duration-300">
                     <FaCloudUploadAlt size={14} /> Send it{" "}
@@ -451,20 +451,22 @@ const SearchBy = ({ onClick }) => {
 
                 <h3>
                   Weight:{" "}
-                  {filterOrder?.order[0].type === "mango"
+                  {filterOrder?.order.length &&
+                  filterOrder?.order[0].type === "mango"
                     ? filterOrder.weight * 12
                     : filterOrder.weight}
                   kg
                 </h3>
-                {filterOrder?.order[0].type === "mango" && (
-                  <h3>Lot: {filterOrder.weight}</h3>
-                )}
+                {filterOrder?.order.length &&
+                  filterOrder?.order[0].type === "mango" && (
+                    <h3>Lot: {filterOrder.weight}</h3>
+                  )}
               </div>
             </div>
             <h1 className="text-2xl">Order:</h1>
             <div className="border-t my-2">
               {filterOrder &&
-                filterOrder.order.map((item, i) => (
+                filterOrder?.order.map((item, i) => (
                   <div key={i}>
                     <div className="flex justify-between py-1 md:py-1 border-b">
                       <div>
