@@ -239,7 +239,7 @@ const AddMangoOrder = ({ onClick }) => {
             }
           }
         }
-        // sendConfirmationMsg(values, orderID);
+        sendConfirmationMsg(values, orderID);
         createCustomer(values, date, cusetomer_id);
 
         const sfc = {
@@ -284,6 +284,7 @@ const AddMangoOrder = ({ onClick }) => {
           title: "Something went wrong!!!",
           message: `Please try again later..`,
           color: "orange",
+          autoClose: 6000,
         });
         setOrderResponse(null);
         console.error("Transaction failed:", error);
@@ -321,6 +322,7 @@ const AddMangoOrder = ({ onClick }) => {
           title: response?.data.msg,
           message: "Message sent successfully",
           color: "blue",
+          autoClose: 6000,
         });
       })
       .catch((error) => {
